@@ -143,15 +143,19 @@ class EditableController extends Controller
   #
   # @param content [String] string to insert
   insert: (content, $li) ->
-    suffix = if (suffix = @getOpt 'suffix') == "" then suffix else suffix or "\u00A0"
-    @query.el
-      .removeClass 'atwho-query'
-      .addClass 'atwho-inserted'
-      .html content
-    if range = @_getRange()
-      range.setEndAfter @query.el[0]
-      range.collapse false
-      range.insertNode suffixNode = @app.document.createTextNode suffix
-      @_setRange 'after', suffixNode, range
-    @$inputor.focus() unless @$inputor.is ':focus'
-    @$inputor.change()
+    overrides = @getOpt "functionOverrides"
+    if overrides.insert
+      overrides.insert(content, $li)
+    else
+      suffix = if (suffix = @getOpt 'suffix') == "" then suffix else suffix or "\u00A0"
+      @query.el
+        .removeClass 'atwho-query'
+        .addClass 'atwho-inserted'
+        .html content
+      if range = @_getRange()
+        range.setEndAfter @query.el[0]
+        range.collapse false
+        range.insertNode suffixNode = @app.document.createTextNode suffix
+        @_setRange 'after', suffixNode, range
+      @$inputor.focus() unless @$inputor.is ':focus'
+      @$inputor.change()

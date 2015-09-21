@@ -696,19 +696,24 @@ EditableController = (function(superClass) {
   };
 
   EditableController.prototype.insert = function(content, $li) {
-    var range, suffix, suffixNode;
-    suffix = (suffix = this.getOpt('suffix')) === "" ? suffix : suffix || "\u00A0";
-    this.query.el.removeClass('atwho-query').addClass('atwho-inserted').html(content);
-    if (range = this._getRange()) {
-      range.setEndAfter(this.query.el[0]);
-      range.collapse(false);
-      range.insertNode(suffixNode = this.app.document.createTextNode(suffix));
-      this._setRange('after', suffixNode, range);
+    var overrides, range, suffix, suffixNode;
+    overrides = this.getOpt("functionOverrides");
+    if (overrides.insert) {
+      return overrides.insert(content, $li);
+    } else {
+      suffix = (suffix = this.getOpt('suffix')) === "" ? suffix : suffix || "\u00A0";
+      this.query.el.removeClass('atwho-query').addClass('atwho-inserted').html(content);
+      if (range = this._getRange()) {
+        range.setEndAfter(this.query.el[0]);
+        range.collapse(false);
+        range.insertNode(suffixNode = this.app.document.createTextNode(suffix));
+        this._setRange('after', suffixNode, range);
+      }
+      if (!this.$inputor.is(':focus')) {
+        this.$inputor.focus();
+      }
+      return this.$inputor.change();
     }
-    if (!this.$inputor.is(':focus')) {
-      this.$inputor.focus();
-    }
-    return this.$inputor.change();
   };
 
   return EditableController;
@@ -1122,6 +1127,7 @@ $.fn.atwho["default"] = {
   displayTpl: "<li>${name}</li>",
   insertTpl: "${atwho-at}${name}",
   callbacks: DEFAULT_CALLBACKS,
+  functionOverrides: {},
   searchKey: "name",
   suffix: void 0,
   hideWithoutSuffix: false,
