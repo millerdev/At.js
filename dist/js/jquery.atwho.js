@@ -699,7 +699,7 @@ EditableController = (function(superClass) {
     var overrides, range, suffix, suffixNode;
     overrides = this.getOpt("functionOverrides");
     if (overrides.insert) {
-      return overrides.insert(content, $li);
+      return overrides.insert.bind(this)(content, $li);
     } else {
       suffix = (suffix = this.getOpt('suffix')) === "" ? suffix : suffix || "\u00A0";
       this.query.el.removeClass('atwho-query').addClass('atwho-inserted').html(content);

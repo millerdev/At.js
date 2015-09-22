@@ -145,7 +145,7 @@ class EditableController extends Controller
   insert: (content, $li) ->
     overrides = @getOpt "functionOverrides"
     if overrides.insert
-      overrides.insert(content, $li)
+      overrides.insert.bind(this)(content, $li)
     else
       suffix = if (suffix = @getOpt 'suffix') == "" then suffix else suffix or "\u00A0"
       @query.el
