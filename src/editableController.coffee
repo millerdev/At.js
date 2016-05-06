@@ -143,6 +143,7 @@ class EditableController extends Controller
   #
   # @param content [String] string to insert
   insert: (content, $li) ->
+    @$inputor.focus() unless @$inputor.is ':focus'
     overrides = @getOpt "functionOverrides"
     if overrides.insert
       overrides.insert.bind(this)(content, $li)

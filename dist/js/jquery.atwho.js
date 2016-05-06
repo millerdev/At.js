@@ -1,5 +1,5 @@
 /*! jquery.atwho - v1.3.2 %>
-* Copyright (c) 2015 chord.luo <chord.luo@gmail.com>;
+* Copyright (c) 2016 chord.luo <chord.luo@gmail.com>;
 * homepage: http://ichord.github.com/At.js
 * Licensed MIT
 */
@@ -697,6 +697,9 @@ EditableController = (function(superClass) {
 
   EditableController.prototype.insert = function(content, $li) {
     var overrides, range, suffix, suffixNode;
+    if (!this.$inputor.is(':focus')) {
+      this.$inputor.focus();
+    }
     overrides = this.getOpt("functionOverrides");
     if (overrides.insert) {
       return overrides.insert.bind(this)(content, $li);
